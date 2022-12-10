@@ -35,11 +35,10 @@ func getImage() error {
 	if fileErr != nil {
 		return errors.New("Fuck img decode Error")
 	}
-	var done, FileWriteErr = file.Write(data)
+	var _, FileWriteErr = file.Write(data)
 	if FileWriteErr != nil {
 		return errors.New("img Write Error")
 	}
 
-	log.Println(done)
 	return nil
 }
