@@ -1,25 +1,44 @@
 package main
 
 import (
+	"errors"
+	"io/ioutil"
 	"log"
-	"math/rand"
+	"net/http"
+	"os"
 )
 
 func main() {
-	var getPicsLink string = getPics()
-	log.Println(getPicsLink)
+	var err error = getImage()
+	if err != nil {
+		log.Println("error during the Process")
+	}
 }
 
-func getPics() string {
-	var catagory string = getRandom()
-	log.Println(catagory)
-	return ""
-}
+func getImage() error {
+	var req, reqErr = http.Get("https://pic.re/image")
 
-func getRandom() string {
-	var collection []string = []string{"waifu", "neko", "shinobu", "megumin", "bully", "cuddle", "hug", "awoo", "kiss", "pat", "smug", "bonk", "blush", "smile", "handhold", "glomp", "happy", "wink", "dance"}
-	//	leng 19
-	var index int = rand.Intn(18-1) + 1
-	log.Println(index)
-	return collection[index]
+	if reqErr != nil {
+		return errors.New("fUCK iMG rEQ eRROR")
+	}
+	defer req.Body.Close()
+
+	var data, dataErr = ioutil.ReadAll(req.Body)
+
+	if dataErr != nil {
+		return errors.New("Fuck img decode Error")
+	}
+
+	var file, fileErr = os.Create("waifu.png")
+
+	if fileErr != nil {
+		return errors.New("Fuck img decode Error")
+	}
+	var done, FileWriteErr = file.Write(data)
+	if FileWriteErr != nil {
+		return errors.New("img Write Error")
+	}
+
+	log.Println(done)
+	return nil
 }
