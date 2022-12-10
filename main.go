@@ -11,7 +11,7 @@ import (
 func main() {
 	var err error = getImage()
 	if err != nil {
-		log.Println("error during the Process")
+		log.Println(err.Error())
 	}
 }
 
@@ -29,6 +29,7 @@ func getImage() error {
 		return errors.New("Fuck img decode Error")
 	}
 
+	// var file, fileErr = os.Create("~/Desktop/vue-me/waifu/waifu.png")
 	var file, fileErr = os.Create("waifu.png")
 
 	if fileErr != nil {
